@@ -1,7 +1,10 @@
-from view.ScreenManager import ScreenManager
+import curses
+from view.screenManager import ScreenManager
 
 def main():
-    ScreenManager()
+    screenManager = ScreenManager()
+    screenManager.run()
+    curses.endwin()
 
 if __name__ == '__main__':
     main()
