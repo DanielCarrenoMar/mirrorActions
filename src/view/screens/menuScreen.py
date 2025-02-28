@@ -7,7 +7,7 @@ class MenuScreen(BaseScreen):
     def __init__(self, endApp:callable, changeRecording:callable, changePlay:callable, changeConfig:callable):
         super().__init__("Menu")
 
-        self.options = OptionComp()
+        self.options = OptionComp(0, 3)
         self.options.addItem("0",OptionItem("Salir", endApp))
         self.options.addItem("1",OptionItem("Grabar", changeRecording))
         self.options.addItem("2",OptionItem("Reproducir", changePlay))
