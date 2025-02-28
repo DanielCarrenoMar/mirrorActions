@@ -10,7 +10,7 @@ class MenuScreen(BaseScreen):
 
         self.options = OptionComp(0, 3)
         self.options.addItem("0",OptionItemAction("Salir", endApp))
-        self.options.addItem("1",OptionItemInput("Grabar", self.userInput, lambda userInput: configManager.updateConfig("text", userInput)))
+        self.options.addItem("1",OptionItemAction("Grabar", changeRecording))
         self.options.addItem("2",OptionItemAction("Reproducir", changePlay))
         self.options.addItem("3",OptionItemAction("Configurar", changeConfig))
 

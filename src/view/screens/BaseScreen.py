@@ -20,11 +20,14 @@ class BaseScreen():
     def draw(self, window: curses._CursesWindow):
         headerComp(window,self.title)
         window.addstr("\n")
+        
+
+    def inputLogic(self, window: curses._CursesWindow):
+        userInputText = self.userInput(window, 0, 2, "Opccion: ")
+        self.userInputListener(userInputText)
 
     def bucle(self, window: curses._CursesWindow):
         window.clear()
         self.draw(window)
-        
-        userInputText = self.userInput(window, 0, 2, "Opccion: ")
-        self.userInputListener(userInputText)
+        self.inputLogic(window)
         window.refresh()
