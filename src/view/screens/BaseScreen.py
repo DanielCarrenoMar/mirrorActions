@@ -6,13 +6,13 @@ from threading import Thread
 class BaseScreen():
     def __init__(self, title:str):
         self.title = title
-        self.userInputText = ""
 
-    def userInput(self, window: curses._CursesWindow, X:int, Y:int, text:str):
+    def userInput(self, window: curses._CursesWindow, X:int, Y:int, text:str) -> str:
         curses.echo()
         window.addstr(Y, X, text, curses.A_REVERSE)
-        self.userInputText = window.getstr(Y, X + len(text) + 1, 10).decode('utf-8')
+        userInputText = window.getstr(Y, X + len(text) + 1, 10).decode('utf-8')
         curses.noecho()
+        return userInputText
 
     def userInputListener(self, input):
         pass
@@ -25,6 +25,6 @@ class BaseScreen():
         window.clear()
         self.draw(window)
         
-        self.userInput(window, 0, 2, "Opccion: ")
-        self.userInputListener(self.userInputText)
+        userInputText = self.userInput(window, 0, 2, "Opccion: ")
+        self.userInputListener(userInputText)
         window.refresh()

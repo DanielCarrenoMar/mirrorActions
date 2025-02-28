@@ -1,20 +1,49 @@
 from __future__ import annotations
 import curses
+from typing import Callable
+from abc import ABC, abstractmethod
 
-class OptionItem():
-    def __init__(self, text:str, action:callable):
+class OptionItem(ABC):
+    def __init__(self, text: str):
         self.text = text
+
+    @abstractmethod
+    def draw(self, window: curses._CursesWindow, X: int, Y: int):
+        pass
+
+    @abstractmethod
+    def runAction(self):
+        pass
+
+class OptionItemAction(OptionItem):
+    def __init__(self, text:str, action:callable):
+        super().__init__(text)
         self.action = action
 
     def draw(self, window: curses._CursesWindow, X:int, Y:int):
         window.addstr(Y, X, self.text)
 
-    def action(self):
+    def runAction(self):
         self.action()
 
 class OptionItemInput(OptionItem):
-    def __init__(self, text:str, action:callable):
-        super().__init__(text, action)
+    def __init__(self, text:str, userInputFun: Callable[[curses._CursesWindow, int, int, str],None], action:Callable[[str],None]):
+        super().__init__(text)
+        self.action = action
+        self.editing = False
+        self.userInputFun = userInputFun
+        self.userInputText = ""
+    
+    def draw(self, window: curses._CursesWindow, X:int, Y:int):
+        window.addstr(Y, X, self.text)
+        if (not self.editing): return
+        self.userInputText = self.userInputFun(window, X + len(self.text) + 1, Y, "")
+        self.editing = False
+        self.action(self.userInputText)
+
+    def runAction(self):
+        self.editing = True
+
 
 class OptionComp():
     def __init__(self, X:int, Y:int):
@@ -27,7 +56,7 @@ class OptionComp():
 
     def select(self, key:str):
         if (key not in self.items): return
-        self.items[key].action()
+        self.items[key].runAction()
 
     def draw(self, window: curses._CursesWindow):
         for i, (key,item) in enumerate(self.items.items()):
