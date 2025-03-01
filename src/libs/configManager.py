@@ -1,7 +1,7 @@
 import json
 
 config = {
-    "endKeys": ["1", "2"]
+    "endKeys": ["q", "2"]
 }
 
 def updateConfig(key, value):

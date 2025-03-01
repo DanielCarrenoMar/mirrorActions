@@ -18,10 +18,13 @@ class BaseScreen():
     def userInputListener(self, input):
         pass
 
+    def show(self): pass
+
+    def hide(self): pass
+
     def draw(self, window: curses._CursesWindow):
         self.header.draw(window, 0, 0)
         window.addstr("\n")
-        
 
     def inputLogic(self, window: curses._CursesWindow):
         userInputText = self.userInput(window, 0, 2, "Opccion: ")
