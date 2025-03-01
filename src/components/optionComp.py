@@ -1,15 +1,12 @@
 from __future__ import annotations
 import curses
 from typing import Callable
-from abc import ABC, abstractmethod
+from abc import abstractmethod
+from components.component import Component
 
-class OptionItem(ABC):
+class OptionItem(Component):
     def __init__(self, text: str):
         self.text = text
-
-    @abstractmethod
-    def draw(self, window: curses._CursesWindow, X: int, Y: int):
-        pass
 
     @abstractmethod
     def runAction(self):

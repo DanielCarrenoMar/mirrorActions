@@ -1,11 +1,12 @@
 from __future__ import annotations
 import curses
-from components.headerComp import headerComp
+from components.headerComp import HeaderComp
 from threading import Thread
 
 class BaseScreen():
     def __init__(self, title:str):
         self.title = title
+        self.header = HeaderComp(title)
 
     def userInput(self, window: curses._CursesWindow, X:int, Y:int, text:str) -> str:
         curses.echo()
@@ -18,7 +19,7 @@ class BaseScreen():
         pass
 
     def draw(self, window: curses._CursesWindow):
-        headerComp(window,self.title)
+        self.header.draw(window, 0, 0)
         window.addstr("\n")
         
 

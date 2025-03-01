@@ -6,7 +6,6 @@ def main():
     screenManager = ScreenManager()
     screenManager.run()
     curses.endwin()
-    print(configManager.getConfig("text"))
     configManager.saveConfig("./config.json")
 
 if __name__ == '__main__':

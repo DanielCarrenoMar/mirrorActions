@@ -1,7 +1,11 @@
 from __future__ import annotations
 import curses
+from components.component import Component
 
-def headerComp(window: curses._CursesWindow, title:str) -> str:
-     
-    window.addstr(f"{title.upper()} \n" +
+class HeaderComp(Component):
+    def __init__(self, title:str):
+        self.title = title
+
+    def draw(self, window: curses._CursesWindow, X: int, Y: int):
+        window.addstr(Y, X, f"{self.title.upper()} \n" +
             "----------------------------------------\n")
