@@ -23,7 +23,9 @@ class ScreenManager():
 
 
     def __init__(self):
+        self.actionsList = []
         self.running = True
+
         self.screens:Dict[ScreenManager.ScreenType, BaseScreen] = {
             ScreenManager.ScreenType.FINISH: FinishScreen(
                 lambda: self.changeScreen(self.ScreenType.MENU),
@@ -31,11 +33,13 @@ class ScreenManager():
             ),
 
             ScreenManager.ScreenType.RECORDING: RecordingScreen(
-                lambda: self.changeScreen(self.ScreenType.FINISH)
+                lambda: self.changeScreen(self.ScreenType.FINISH),
+                lambda actions : self.setActionsList(actions)
             ),
 
             ScreenManager.ScreenType.SAVEAS: SaveAsScreen(
                 lambda: self.changeScreen(self.ScreenType.MENU),
+                lambda: self.getActionsList()
             ),
 
             ScreenManager.ScreenType.MENU: MenuScreen(
@@ -47,6 +51,12 @@ class ScreenManager():
         }
 
         self.currentScreen = self.ScreenType.MENU
+
+    def getActionsList(self):
+        return self.actionsList
+    
+    def setActionsList(self, actions:list):
+        self.actionsList = actions
 
     def changeScreen(self, screen:ScreenManager.ScreenType):
         self.screens[self.currentScreen].hide()
