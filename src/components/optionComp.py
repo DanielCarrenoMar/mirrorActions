@@ -51,9 +51,10 @@ class OptionComp():
     def addItem(self, key:str, item:OptionItem):
         self.items[key] = item
 
-    def select(self, key:str):
-        if (key not in self.items): return
+    def select(self, key:str) -> bool:
+        if (key not in self.items): return False
         self.items[key].runAction()
+        return True
 
     def draw(self, window: curses._CursesWindow):
         for i, (key,item) in enumerate(self.items.items()):

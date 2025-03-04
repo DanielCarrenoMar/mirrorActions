@@ -1,9 +1,8 @@
-from pynput.keyboard import Key, Listener, Controller
-from pynput.mouse import Button, Controller
+from pynput.keyboard import Listener
+from pynput.mouse import Button
 from pynput import mouse
 from typing import Callable
-from libs.configManager import getConfig
-import threading
+from time import time
 
 class Recorder:
     def __init__(self, stopFun:Callable[[], None], stopEvents = ["q"]):
@@ -12,6 +11,7 @@ class Recorder:
         self.events = []
         self.mouseListener = mouse.Listener(on_click=self.onClick)
         self.keyboardListener = Listener(on_press=self.onPress)
+        self.lastEventTime = time()
     
     def onClick(self, x, y, button, pressed):
         print(x, y, button, pressed)
@@ -22,14 +22,39 @@ class Recorder:
                 event = 'right_click'
             elif button == Button.middle:
                 self.stop()
-            self.events.append(["click",button, x, y])
-            print(self.events )
+
+            currentTime = time()
+            timeBetween = currentTime - self.lastEventTime
+            self.lastEventTime = currentTime
+
+            self.events.append(
+                {
+                    "type":"click",
+                    "key": str(button), 
+                    "X":x, 
+                    "Y":y,
+                    "time": timeBetween
+                }
+            )
+            print(self.events)
+
             if event in self.stopEvents:
                 self.stop()
     
     def onPress(self, key):
         keyStr = str(key).strip("'")
-        self.events.append(["key", keyStr])
+
+        currentTime = time()
+        timeBetween = currentTime - self.lastEventTime
+        self.lastEventTime = currentTime
+
+        self.events.append(
+                {
+                    "type":"keyBoard",
+                    "key": keyStr,
+                    "time": currentTime
+                }
+            )
         if keyStr in self.stopEvents:
             self.stop()
     

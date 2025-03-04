@@ -24,6 +24,7 @@ class ScreenManager():
 
     def __init__(self):
         self.actionsList = []
+        self.message = "Prueba"
         self.running = True
 
         self.screens:Dict[ScreenManager.ScreenType, BaseScreen] = {
@@ -33,20 +34,22 @@ class ScreenManager():
             ),
 
             ScreenManager.ScreenType.RECORDING: RecordingScreen(
-                lambda: self.changeScreen(self.ScreenType.FINISH),
-                lambda actions : self.setActionsList(actions)
+                lambda: self.changeScreen(self.ScreenType.SAVEAS),
+                self.setActionsList
             ),
 
             ScreenManager.ScreenType.SAVEAS: SaveAsScreen(
-                lambda: self.changeScreen(self.ScreenType.MENU),
-                lambda: self.getActionsList()
+                lambda message: self.changescreenWithMessage(self.ScreenType.MENU, message),
+                self.getActionsList
             ),
 
             ScreenManager.ScreenType.MENU: MenuScreen(
-                lambda: self.stop(),
+                self.stop,
                 lambda: self.changeScreen(self.ScreenType.RECORDING),
                 lambda: self.changeScreen(self.ScreenType.MENU),
-                lambda: self.changeScreen(self.ScreenType.MENU)
+                lambda: self.changeScreen(self.ScreenType.MENU),
+                self.getMessages,
+                self.setMessages
             )
         }
 
@@ -58,10 +61,20 @@ class ScreenManager():
     def setActionsList(self, actions:list):
         self.actionsList = actions
 
+    def getMessages(self):
+        return self.message
+    
+    def setMessages(self, message:str):
+        self.message = message
+
     def changeScreen(self, screen:ScreenManager.ScreenType):
         self.screens[self.currentScreen].hide()
         self.currentScreen = screen
         self.screens[self.currentScreen].show()
+
+    def changescreenWithMessage(self, screen:ScreenManager.ScreenType, message:str):
+        self.message = message
+        self.changeScreen(screen)
 
     def stop(self):
         self.running = False

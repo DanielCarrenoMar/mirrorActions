@@ -5,8 +5,11 @@ from components.optionComp import OptionComp, OptionItemAction, OptionItemInput
 import libs.configManager as configManager
 
 class MenuScreen(BaseScreen):
-    def __init__(self, endApp:callable, changeRecording:callable, changePlay:callable, changeConfig:callable):
+    def __init__(self, endApp:callable, changeRecording:callable, changePlay:callable, changeConfig:callable, getMessages:callable, setMessages:callable):
         super().__init__("Menu")
+
+        self.getMessages = getMessages
+        self.setMessages = setMessages
 
         self.options = OptionComp(0, 3)
         self.options.addItem("0",OptionItemAction("Salir", endApp))
@@ -20,5 +23,6 @@ class MenuScreen(BaseScreen):
     def draw(self, window: curses._CursesWindow):
         super().draw(window)
         self.options.draw(window)
+        window.addstr(0, 40 - len(self.getMessages()) ,self.getMessages())
         
         
