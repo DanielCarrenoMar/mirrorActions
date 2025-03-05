@@ -10,12 +10,15 @@ def loadActions() -> list:
 
     return actions
 
-def saveActions(actions: list, name: str):
-    newActions = loadActions()
+def saveActions(actions: list, name: str) -> bool:
+    newActions:list[dict[str,list]] = loadActions()
+
+    for action in newActions:
+        if action.get(name):
+            return False
 
     newActions.append({name: actions})
 
     with open("saves/actions.json", "w") as file:
         file.write(json.dumps(newActions, indent=4))
-
-    print("Guardado como " + name + ".json")
+    return True

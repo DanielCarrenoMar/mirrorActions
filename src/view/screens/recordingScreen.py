@@ -7,9 +7,10 @@ from libs.recorderKeys import Recorder
 from typing import Callable
 
 class RecordingScreen(BaseScreen):
-    def __init__(self, changeFinish:callable, setActionsList:Callable[[str], None]):
+    def __init__(self, changeFinish:callable, changeMenuWithMessage:callable, setActionsList:Callable[[str], None]):
         super().__init__("Grabando...")
         self.changeFinish = changeFinish
+        self.changeMenuWithMessage = changeMenuWithMessage
         self.setActionsList = setActionsList
         self.recorder = None
 
@@ -20,6 +21,10 @@ class RecordingScreen(BaseScreen):
         pass
 
     def stopHandler(self):
+        if len(self.recorder.getEvents()) == 0:
+            self.changeMenuWithMessage("No grabo ninguna accion")
+            return
+
         self.setActionsList(self.recorder.getEvents())
         self.changeFinish()
 

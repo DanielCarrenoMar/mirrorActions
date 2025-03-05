@@ -11,10 +11,20 @@ class Recorder:
         self.events = []
         self.mouseListener = mouse.Listener(on_click=self.onClick)
         self.keyboardListener = Listener(on_press=self.onPress)
-        self.lastEventTime = time()
+        self.lastEventTime = None
+
+    def calTimeBetween(self):
+        if self.lastEventTime == None:
+            self.lastEventTime = time()
+            return 0
+
+        currentTime = time()
+        timeBetween = currentTime - self.lastEventTime
+        self.lastEventTime = currentTime
+
+        return timeBetween
     
     def onClick(self, x, y, button, pressed):
-        print(x, y, button, pressed)
         if pressed:
             if button == Button.left:
                 event = 'left_click' 
@@ -22,10 +32,7 @@ class Recorder:
                 event = 'right_click'
             elif button == Button.middle:
                 self.stop()
-
-            currentTime = time()
-            timeBetween = currentTime - self.lastEventTime
-            self.lastEventTime = currentTime
+                return
 
             self.events.append(
                 {
@@ -33,10 +40,9 @@ class Recorder:
                     "key": str(button), 
                     "X":x, 
                     "Y":y,
-                    "time": timeBetween
+                    "time": self.calTimeBetween()
                 }
             )
-            print(self.events)
 
             if event in self.stopEvents:
                 self.stop()
@@ -44,25 +50,22 @@ class Recorder:
     def onPress(self, key):
         keyStr = str(key).strip("'")
 
-        currentTime = time()
-        timeBetween = currentTime - self.lastEventTime
-        self.lastEventTime = currentTime
-
+        if keyStr in self.stopEvents:
+            self.stop()
+            return
+        
         self.events.append(
                 {
                     "type":"keyBoard",
                     "key": keyStr,
-                    "time": currentTime
+                    "time": self.calTimeBetween()
                 }
             )
-        if keyStr in self.stopEvents:
-            self.stop()
     
     def start(self):
         self.mouseListener.start()
         self.keyboardListener.start()
-        pass
-    
+            
     def stop(self):
         self.mouseListener.stop()
         self.keyboardListener.stop()

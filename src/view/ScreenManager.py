@@ -35,6 +35,7 @@ class ScreenManager():
 
             ScreenManager.ScreenType.RECORDING: RecordingScreen(
                 lambda: self.changeScreen(self.ScreenType.SAVEAS),
+                lambda message: self.changescreenWithMessage(self.ScreenType.MENU, message),
                 self.setActionsList
             ),
 
