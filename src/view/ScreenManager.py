@@ -26,7 +26,7 @@ class ScreenManager():
 
     def __init__(self):
         self.actionsList = []
-        self.message = "Prueba"
+        self.message = ""
         self.running = True
 
         self.screens:Dict[ScreenManager.ScreenType, BaseScreen] = {

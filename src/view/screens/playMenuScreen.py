@@ -12,7 +12,6 @@ class PlayMenuScreen(BaseScreen):
         self.changeMenuWithMessage = changeMenuWithMessage
 
         self.options = OptionComp(0, 3)
-        
             
     def show(self):
         self.options.clear()
@@ -28,8 +27,12 @@ class PlayMenuScreen(BaseScreen):
                 str(actions.index(action) + 1),
                 OptionItemAction(
                     action['name'],
-                    lambda: playActions(action['actions'])
+                    lambda: self.playActionsList(action['actions'])
                 ))
+            
+    def playActionsList(self, actionsList):
+        playActions(actionsList)
+        curses.beep()
 
     def changeMenuCancel(self):
         self.changeMenuWithMessage("No hay acciones guardadas") 
