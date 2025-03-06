@@ -12,6 +12,10 @@ class PlayMenuScreen(BaseScreen):
         self.changeMenuWithMessage = changeMenuWithMessage
 
         self.options = OptionComp(0, 3)
+        
+            
+    def show(self):
+        self.options.clear()
         self.options.addItem("0",OptionItemAction("Salir", self.changeMenu))
 
         actions = loadActions()

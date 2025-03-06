@@ -19,6 +19,9 @@ def saveActions(actions: list, name: str) -> bool:
 
     newActions.append({"name": name, "actions": actions})
 
+    if not os.path.exists("saves/"):
+        os.makedirs("saves/")
+
     with open("saves/actions.json", "w") as file:
         file.write(json.dumps(newActions, indent=4))
     return True

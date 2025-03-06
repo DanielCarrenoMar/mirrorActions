@@ -51,6 +51,9 @@ class OptionComp():
     def addItem(self, key:str, item:OptionItem):
         self.items[key] = item
 
+    def clear(self):
+        self.items.clear()
+
     def select(self, key:str) -> bool:
         if (key not in self.items): return False
         self.items[key].runAction()
