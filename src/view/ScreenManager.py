@@ -27,6 +27,7 @@ class ScreenManager():
     def __init__(self):
         self.actionsList = []
         self.message = ""
+        self.bucles = 1
         self.running = True
 
         self.screens:Dict[ScreenManager.ScreenType, BaseScreen] = {
@@ -52,20 +53,29 @@ class ScreenManager():
                 lambda: self.changeScreen(self.ScreenType.PLAY),
                 lambda: self.changeScreen(self.ScreenType.CONFIG),
                 self.getMessages,
-                self.setMessages
             ),
 
             ScreenManager.ScreenType.PLAY: PlayMenuScreen(
-                lambda message: self.changescreenWithMessage(self.ScreenType.MENU, message)
-            )
+                lambda message: self.changescreenWithMessage(self.ScreenType.MENU, message),
+                lambda message: self.changescreenWithMessage(self.ScreenType.PLAYOPTIONS, message),
+                self.setActionsList
+            ),
+
+            ScreenManager.ScreenType.PLAYOPTIONS: PlayOptionsScreen(
+                lambda message: self.changescreenWithMessage(self.ScreenType.MENU, message),
+                lambda message: self.changescreenWithMessage(self.ScreenType.PLAYING, message),
+                lambda: self.changeScreen(self.ScreenType.DELETE),
+                self.getMessages,
+                self.getActionsList,
+                self.setBucles,
+                self.getBucles
+            ),
+
+            
 
         }
 
         """
-        ScreenManager.ScreenType.PLAYOPTIONS: PlayOptionsScreen(
-
-        ),
-
         ScreenManager.ScreenType.PLAYING: PlayingScreen(
 
         ),
@@ -84,6 +94,17 @@ class ScreenManager():
     
     def setMessages(self, message:str):
         self.message = message
+
+    def getBucles(self):
+        return self.bucles
+    
+    def setBucles(self, bucles:str):
+        try:
+            bucle = int(bucles)
+        except ValueError:
+            return
+        if bucle < 1: return
+        self.bucles = bucles
 
     def changeScreen(self, screen:ScreenManager.ScreenType):
         self.screens[self.currentScreen].hide()

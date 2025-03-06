@@ -7,9 +7,12 @@ from libs.playJsonKeys import playActions
 from typing import Callable
 
 class PlayMenuScreen(BaseScreen):
-    def __init__(self, changeMenuWithMessage:Callable[[str],None]):
-        super().__init__("Menu")
+    def __init__(self, changeMenuWithMessage:Callable[[str],None], changePlayOptionsWithMessage:Callable[[str],None], setActionsList:Callable[[list],None]):
+        super().__init__("reproducir")
+
+        self.setActionsList = setActionsList
         self.changeMenuWithMessage = changeMenuWithMessage
+        self.changePlayOptionsWithMessage = changePlayOptionsWithMessage
 
         self.options = OptionComp(0, 3)
             
@@ -23,16 +26,17 @@ class PlayMenuScreen(BaseScreen):
             return
         
         for action in actions:
+            name = action['name']
             self.options.addItem(
                 str(actions.index(action) + 1),
                 OptionItemAction(
-                    action['name'],
-                    lambda: self.playActionsList(action['actions'])
+                    name,
+                    lambda: self.playActionsList(name,action['actions'])
                 ))
             
-    def playActionsList(self, actionsList):
-        playActions(actionsList)
-        curses.beep()
+    def playActionsList(self, name:str, actionsList:list):
+        self.setActionsList(actionsList)
+        self.changePlayOptionsWithMessage(name)
 
     def changeMenuCancel(self):
         self.changeMenuWithMessage("No hay acciones guardadas") 
