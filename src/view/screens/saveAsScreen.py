@@ -21,8 +21,11 @@ class SaveAsScreen(BaseScreen):
     def changeMenuSave(self, name):
         self.changeMenuWithMessage("Guardado como " + name)
 
-    def userInputListener(self, input):
+    def userInputListener(self, input:str):
         if self.options.select(input): return
+        if input.strip() == "":
+            self.changeMenuCancel()
+            return
 
         actionsList = self.getActionsList()
         if len(actionsList) > 0:

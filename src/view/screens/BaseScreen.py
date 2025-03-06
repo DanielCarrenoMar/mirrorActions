@@ -11,6 +11,7 @@ class BaseScreen():
     def userInput(self, window: curses._CursesWindow, X:int, Y:int, text:str) -> str:
         curses.echo()
         window.addstr(Y, X, text, curses.A_REVERSE)
+        curses.flushinp()
         userInputText = window.getstr(Y, X + len(text) + 1, 10).decode('utf-8')
         curses.noecho()
         return userInputText

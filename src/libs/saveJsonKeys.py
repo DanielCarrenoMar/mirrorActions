@@ -17,7 +17,7 @@ def saveActions(actions: list, name: str) -> bool:
         if action.get(name):
             return False
 
-    newActions.append({name: actions})
+    newActions.append({"name": name, "actions": actions})
 
     with open("saves/actions.json", "w") as file:
         file.write(json.dumps(newActions, indent=4))

@@ -12,6 +12,7 @@ class Recorder:
         self.mouseListener = mouse.Listener(on_click=self.onClick)
         self.keyboardListener = Listener(on_press=self.onPress)
         self.lastEventTime = None
+        self.started = False
 
     def calTimeBetween(self):
         if self.lastEventTime == None:
@@ -26,26 +27,22 @@ class Recorder:
     
     def onClick(self, x, y, button, pressed):
         if pressed:
-            if button == Button.left:
-                event = 'left_click' 
-            elif button == Button.right:
-                event = 'right_click'
-            elif button == Button.middle:
+            if button == Button.middle:
                 self.stop()
                 return
 
             self.events.append(
                 {
                     "type":"click",
-                    "key": str(button), 
+                    "key": str(button).lstrip("Button."), 
                     "X":x, 
                     "Y":y,
                     "time": self.calTimeBetween()
                 }
             )
 
-            if event in self.stopEvents:
-                self.stop()
+            """if event in self.stopEvents:
+                self.stop()"""
     
     def onPress(self, key):
         keyStr = str(key).strip("'")
@@ -63,15 +60,20 @@ class Recorder:
             )
     
     def start(self):
+        if self.started: return
         self.mouseListener.start()
         self.keyboardListener.start()
+        self.started = True
             
     def stop(self):
+        if not self.started: return
         self.mouseListener.stop()
         self.keyboardListener.stop()
         self.stopFun()
+        self.started = False
 
     def wait(self):
+        if not self.started: return
         self.mouseListener.join(0.1)
         self.keyboardListener.join(0.1)
     
