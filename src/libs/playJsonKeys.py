@@ -20,13 +20,3 @@ def playActions(actions: list):
                 mouse.click(Button.left)
             elif action['key'] == 'right':
                 mouse.click(Button.right)
-
-def loadActions(filename: str) -> list:
-    with open(filename, "r") as file:
-        actions = json.load(file)
-    return actions
-
-# Example usage
-filename = "saves/actions.json"
-actions = loadActions(filename)
-playActions(actions[0]['actions'])  # Replace 'example' with the actual key name

@@ -4,10 +4,12 @@ from view.screens.baseScreen import BaseScreen
 from view.screens.menuScreen import MenuScreen
 from view.screens.finishScreen import FinishScreen
 from view.screens.recordingScreen import RecordingScreen
+from view.screens.playMenuScreen import PlayMenuScreen
+from view.screens.playOptionsScreen import PlayOptionsScreen
+from view.screens.playingScreen import PlayingScreen
 from view.screens.saveAsScreen import SaveAsScreen
 from enum import Enum
 from typing import Dict
-from os import system
 
 class ScreenManager():
     class ScreenType(Enum):
@@ -20,7 +22,7 @@ class ScreenManager():
         SAVEAS = 7
         FINISH = 8
         DELETE = 9
-
+        CONFIG = 10
 
     def __init__(self):
         self.actionsList = []
@@ -47,12 +49,27 @@ class ScreenManager():
             ScreenManager.ScreenType.MENU: MenuScreen(
                 self.stop,
                 lambda: self.changeScreen(self.ScreenType.RECORDING),
-                lambda: self.changeScreen(self.ScreenType.MENU),
-                lambda: self.changeScreen(self.ScreenType.MENU),
+                lambda: self.changeScreen(self.ScreenType.PLAY),
+                lambda: self.changeScreen(self.ScreenType.CONFIG),
                 self.getMessages,
                 self.setMessages
+            ),
+
+            ScreenManager.ScreenType.PLAY: PlayMenuScreen(
+                lambda message: self.changescreenWithMessage(self.ScreenType.MENU, message)
             )
+
         }
+
+        """
+        ScreenManager.ScreenType.PLAYOPTIONS: PlayOptionsScreen(
+
+        ),
+
+        ScreenManager.ScreenType.PLAYING: PlayingScreen(
+
+        ),
+        """
 
         self.currentScreen = self.ScreenType.MENU
 
