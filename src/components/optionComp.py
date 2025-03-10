@@ -24,15 +24,16 @@ class OptionItemAction(OptionItem):
         self.action()
 
 class OptionItemInput(OptionItem):
-    def __init__(self, text:str, userInputFun: Callable[[curses._CursesWindow, int, int, str],None], action:Callable[[str],None]):
+    def __init__(self, text:str, userInputFun: Callable[[curses._CursesWindow, int, int, str],None], action:Callable[[str],None], defaultText:str=""):
         super().__init__(text)
         self.action = action
         self.editing = False
         self.userInputFun = userInputFun
         self.userInputText = ""
+        self.defaultText = defaultText
     
     def draw(self, window: curses._CursesWindow, X:int, Y:int):
-        window.addstr(Y, X, self.text)
+        window.addstr(Y, X, self.text + ": " + self.defaultText)
         if (not self.editing): return
         self.userInputText = self.userInputFun(window, X + len(self.text) + 1, Y, "")
         self.editing = False

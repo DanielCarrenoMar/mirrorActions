@@ -16,7 +16,7 @@ class PlayOptionsScreen(BaseScreen):
         self.options = OptionComp(0, 3)
         self.options.addItem("0",OptionItemAction("Cancelar", changePlayMenu))
         self.options.addItem("1",OptionItemAction("Iniciar", lambda: changePlayingWithMessage(getMessage())))
-        self.options.addItem("2",OptionItemInput("Bucles", self.userInput, lambda input: setBucle(input)))
+        self.options.addItem("2",OptionItemInput("Bucles", self.userInput, lambda input: setBucle(input), str(self.getBucle())))
         self.options.addItem("3",OptionItemAction("Borrar", changeDelete))
 
     def userInputListener(self, input):
