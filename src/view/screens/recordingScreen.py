@@ -45,7 +45,6 @@ class RecordingScreen(BaseScreen):
         super().draw(window)
         if self.waitTime > 0:
             window.addstr(2, 0, "Esperando " + str(self.waitTime) + " segundos para comenzar a grabar\n")
-            sleep(.1)
             return
 
         window.addstr(2,0, "Finalizar en " + str(configManager.getConfig("stopKeys")) + "\n")
@@ -54,5 +53,3 @@ class RecordingScreen(BaseScreen):
         for i, event in enumerate(reversed(events[-6:])):
             window.addstr(f"{i} - " + str(event) + "\n")
         self.recorder.wait()
-
-        

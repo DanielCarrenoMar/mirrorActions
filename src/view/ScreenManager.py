@@ -27,7 +27,7 @@ class ScreenManager():
     def __init__(self):
         self.actionsList = []
         self.message = ""
-        self.bucles = 1
+        self.bucles:int = 1
         self.running = True
 
         self.screens:Dict[ScreenManager.ScreenType, BaseScreen] = {
@@ -74,7 +74,8 @@ class ScreenManager():
             ScreenManager.ScreenType.PLAYING: PlayingScreen(
                 lambda message: self.changeScreenWithMessage(self.ScreenType.MENU, message),
                 self.getActionsList,
-                self.getMessage
+                self.getMessage,
+                self.getBucles
             ),
 
         }
@@ -93,14 +94,11 @@ class ScreenManager():
     def setMessages(self, message:str):
         self.message = message
 
-    def getBucles(self):
+    def getBucles(self) -> int:
         return self.bucles
     
     def setBucles(self, bucles:int):
-        try:
-            bucle = int(bucles)
-        except ValueError:
-            return
+        bucle = int(bucles)
         if bucle < 1: return
         self.bucles = bucles
 
@@ -116,6 +114,6 @@ class ScreenManager():
     def stop(self):
         self.running = False
 
-    def run(self):
+    def run(self, window:curses._CursesWindow):
         while self.running:
-            curses.wrapper(self.screens[self.currentScreen].bucle)
+            self.screens[self.currentScreen].bucle(window)

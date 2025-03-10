@@ -8,11 +8,12 @@ from time import sleep
 import threading
 
 class PlayingScreen(BaseScreen, PlayerListener):
-    def __init__(self, changeMenuWithMessage:callable, getActionsList:callable, getMessages:callable):
+    def __init__(self, changeMenuWithMessage:callable, getActionsList:callable, getMessage:callable, getBucle:callable):
         super().__init__("Reproduciendo")
-        self.getMessages = getMessages
+        self.getMessage = getMessage
         self.changeMenuWithMessage = changeMenuWithMessage
         self.getActionsList = getActionsList
+        self.getBucle = getBucle
         self.actionIndex = 0
         
     def userInput(self, window, X, Y, text):
@@ -26,7 +27,7 @@ class PlayingScreen(BaseScreen, PlayerListener):
         self.changeMenuWithMessage("Reproducción finalizada")
 
     def show(self):
-        self.player = Player(self.getActionsList(), configManager.getConfig("stopKeys"))
+        self.player = Player(self.getActionsList(), configManager.getConfig("stopKeys"), self.getBucle())
         self.player.addListener(self)
         self.waitTime = 3
         threading.Thread(target=self.waitForStart).start()
@@ -36,14 +37,12 @@ class PlayingScreen(BaseScreen, PlayerListener):
 
     def draw(self, window: curses._CursesWindow):
         super().draw(window)
-        window.addstr(0, 40 - len(self.getMessages()) ,self.getMessages())
+        self.showMessage(window, self.getMessage() + f" Bucles:{self.getBucle()}")
         if self.waitTime > 0:
             window.addstr(2, 0, "Esperando " + str(self.waitTime) + " segundos para comenzar a grabar\n")
-            sleep(.1)
             return
         
-        window.addstr(2,0, "Finalizar en " + str(configManager.getConfig("stopKeys")) + "\n")
+        window.addstr(2,0, "Finalizar en " + str(configManager.getConfig("stopKeys")))
         
         for i, action in enumerate(self.getActionsList()[self.actionIndex:self.actionIndex + 10]):
-            window.addstr(3 + i, 0, f"{self.actionIndex+i}. {action}")
-
+            window.addstr(3 + i, 0, f"{self.actionIndex+i+1}. {action}")

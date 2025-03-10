@@ -16,7 +16,7 @@ class PlayOptionsScreen(BaseScreen):
         self.options = OptionComp(0, 3)
         self.options.addItem("0",OptionItemAction("Cancelar", changePlayMenu))
         self.options.addItem("1",OptionItemAction("Iniciar", lambda: changePlayingWithMessage(getMessage())))
-        self.options.addItem("2",OptionItemInput("Bucles", self.userInput, lambda input: setBucle(input), str(self.getBucle())))
+        self.options.addItem("2",OptionItemInput("Bucles", self.userInput, lambda input: setBucle(int(input)), str(self.getBucle())))
         self.options.addItem("3",OptionItemAction("Borrar", changeDelete))
 
     def userInputListener(self, input):
@@ -25,7 +25,8 @@ class PlayOptionsScreen(BaseScreen):
     def draw(self, window: curses._CursesWindow):
         super().draw(window)
         self.options.draw(window)
-        window.addstr(0, 40 - len(self.getMessage()) ,self.getMessage())
+        self.showMessage(window, self.getMessage())
+
         window.addstr(8, 0 , "Acciones:")
         for i,action in enumerate(self.getActionsList()[:4]):
             window.addstr(9 + i, 0, str(action))

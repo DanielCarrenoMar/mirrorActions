@@ -8,4 +8,4 @@ class HeaderComp(Component):
 
     def draw(self, window: curses._CursesWindow, X: int, Y: int):
         window.addstr(Y, X, f"{self.title.upper()} \n" +
-            "----------------------------------------\n")
+            "-"*60 + "\n")

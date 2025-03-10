@@ -52,13 +52,14 @@ class PlayerListener(ABC):
         pass
 
 class Player:
-    def __init__(self, actions: list, stopKeys:list, timeBetweenActions:float=None):
+    def __init__(self, actions: list, stopKeys:list, bucles:int = 1, timeBetweenActions:float=None):
         self._keyboard = KeyboardController()
         self._mouse = MouseController()
         self._actions = actions
         self._listeners:list[PlayerListener] = []
         self._stop = False
         self._stopKeys = stopKeys
+        self._bucles = bucles
         self._timeBetweenActions = timeBetweenActions
 
     def onPress(self, key):
@@ -70,24 +71,27 @@ class Player:
     def play(self):
         listener = keyboard.Listener(on_press=self.onPress)
         listener.start()
-        for i, action in enumerate(self._actions):
+        for _ in range(self._bucles):
             if self._stop:
                 break
-            if self._timeBetweenActions: sleep(self._timeBetweenActions)
-            else: sleep(action['time'])
-            self.notify(i)
-            if action['type'] == 'keyBoard':
-                key = action['key']
-                if key in deSerializeKeys: key = deSerializeKeys[key]
-                self._keyboard.press(key)
-                self._keyboard.release(key)
-            elif action['type'] == 'click':
-                x, y = action['X'], action['Y']
-                self._mouse.position = (x, y)
-                if action['key'] == 'left':
-                    self._mouse.click(Button.left)
-                elif action['key'] == 'right':
-                    self._mouse.click(Button.right)
+            for i, action in enumerate(self._actions):
+                if self._stop:
+                    break
+                if self._timeBetweenActions: sleep(self._timeBetweenActions)
+                else: sleep(action['time'])
+                self.notify(i)
+                if action['type'] == 'keyBoard':
+                    key = action['key']
+                    if key in deSerializeKeys: key = deSerializeKeys[key]
+                    self._keyboard.press(key)
+                    self._keyboard.release(key)
+                elif action['type'] == 'click':
+                    x, y = action['X'], action['Y']
+                    self._mouse.position = (x, y)
+                    if action['key'] == 'left':
+                        self._mouse.click(Button.left)
+                    elif action['key'] == 'right':
+                        self._mouse.click(Button.right)
         listener.stop()
 
     def notify(self, actionIndex:int):

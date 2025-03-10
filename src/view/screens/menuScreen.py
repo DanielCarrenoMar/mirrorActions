@@ -22,6 +22,4 @@ class MenuScreen(BaseScreen):
     def draw(self, window: curses._CursesWindow):
         super().draw(window)
         self.options.draw(window)
-        window.addstr(0, 40 - len(self.getMessage()) ,self.getMessage())
-        
-        
+        self.showMessage(window, self.getMessage())

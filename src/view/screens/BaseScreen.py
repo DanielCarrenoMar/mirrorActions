@@ -19,6 +19,9 @@ class BaseScreen():
     def userInputListener(self, input):
         pass
 
+    def showMessage(self, window: curses._CursesWindow, message:str):
+        window.addstr(0, 60 - len(message), message)
+
     def show(self): pass
 
     def hide(self): pass
