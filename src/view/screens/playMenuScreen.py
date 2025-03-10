@@ -3,7 +3,6 @@ import curses
 from view.screens.baseScreen import BaseScreen
 from components.optionComp import OptionComp, OptionItemAction
 from libs.saveJsonKeys import loadActions
-from libs.playJsonKeys import playActions
 from typing import Callable
 
 class PlayMenuScreen(BaseScreen):
@@ -25,16 +24,16 @@ class PlayMenuScreen(BaseScreen):
             self.changeMenuCancel()
             return
         
-        for action in actions:
+        for i, action in enumerate(actions):
             name = action['name']
             self.options.addItem(
-                str(actions.index(action) + 1),
+                str(i + 1),
                 OptionItemAction(
                     name,
-                    lambda: self.playActionsList(name,action['actions'])
+                    lambda name=name, actionsList=action['actions']: self.changePlayOptionWithActionsList(name, actionsList)
                 ))
             
-    def playActionsList(self, name:str, actionsList:list):
+    def changePlayOptionWithActionsList(self, name:str, actionsList:list):
         self.setActionsList(actionsList)
         self.changePlayOptionsWithMessage(name)
 

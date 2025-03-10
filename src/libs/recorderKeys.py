@@ -1,6 +1,7 @@
 from pynput.keyboard import Listener
 from pynput.mouse import Button
 from pynput import mouse
+from pynput.keyboard import Key, KeyCode
 from typing import Callable
 from time import time
 
@@ -44,7 +45,7 @@ class Recorder:
             """if event in self.stopEvents:
                 self.stop()"""
     
-    def onPress(self, key):
+    def onPress(self, key:Key | KeyCode):
         keyStr = str(key).strip("'")
 
         if keyStr in self.stopEvents:

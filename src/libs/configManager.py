@@ -1,8 +1,6 @@
 import json
 
-config = {
-    "endKeys": ["q", "2"]
-}
+config = {}
 
 def updateConfig(key, value):
     global config
@@ -11,6 +9,11 @@ def updateConfig(key, value):
 def getConfig(key):
     global config
     return config[key]
+
+def loadConfig(file_path: str):
+    global config
+    with open (file_path) as json_file:
+        config = json.load(json_file)
 
 def saveConfig(file_path: str):
     global config

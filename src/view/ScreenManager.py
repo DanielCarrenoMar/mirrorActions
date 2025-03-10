@@ -38,12 +38,12 @@ class ScreenManager():
 
             ScreenManager.ScreenType.RECORDING: RecordingScreen(
                 lambda: self.changeScreen(self.ScreenType.SAVEAS),
-                lambda message: self.changescreenWithMessage(self.ScreenType.MENU, message),
+                lambda message: self.changeScreenWithMessage(self.ScreenType.MENU, message),
                 self.setActionsList
             ),
 
             ScreenManager.ScreenType.SAVEAS: SaveAsScreen(
-                lambda message: self.changescreenWithMessage(self.ScreenType.MENU, message),
+                lambda message: self.changeScreenWithMessage(self.ScreenType.MENU, message),
                 self.getActionsList
             ),
 
@@ -52,34 +52,32 @@ class ScreenManager():
                 lambda: self.changeScreen(self.ScreenType.RECORDING),
                 lambda: self.changeScreen(self.ScreenType.PLAY),
                 lambda: self.changeScreen(self.ScreenType.CONFIG),
-                self.getMessages,
+                self.getMessage,
             ),
 
             ScreenManager.ScreenType.PLAY: PlayMenuScreen(
-                lambda message: self.changescreenWithMessage(self.ScreenType.MENU, message),
-                lambda message: self.changescreenWithMessage(self.ScreenType.PLAYOPTIONS, message),
+                lambda message: self.changeScreenWithMessage(self.ScreenType.MENU, message),
+                lambda message: self.changeScreenWithMessage(self.ScreenType.PLAYOPTIONS, message),
                 self.setActionsList
             ),
 
             ScreenManager.ScreenType.PLAYOPTIONS: PlayOptionsScreen(
-                lambda message: self.changescreenWithMessage(self.ScreenType.MENU, message),
-                lambda message: self.changescreenWithMessage(self.ScreenType.PLAYING, message),
+                lambda: self.changeScreen(self.ScreenType.PLAY),
+                lambda message: self.changeScreenWithMessage(self.ScreenType.PLAYING, message),
                 lambda: self.changeScreen(self.ScreenType.DELETE),
-                self.getMessages,
+                self.getMessage,
                 self.getActionsList,
-                self.setBucles,
-                self.getBucles
+                self.getBucles,
+                self.setBucles
             ),
 
-            
+            ScreenManager.ScreenType.PLAYING: PlayingScreen(
+                lambda message: self.changeScreenWithMessage(self.ScreenType.MENU, message),
+                self.getActionsList,
+                self.getMessage
+            ),
 
         }
-
-        """
-        ScreenManager.ScreenType.PLAYING: PlayingScreen(
-
-        ),
-        """
 
         self.currentScreen = self.ScreenType.MENU
 
@@ -89,7 +87,7 @@ class ScreenManager():
     def setActionsList(self, actions:list):
         self.actionsList = actions
 
-    def getMessages(self):
+    def getMessage(self):
         return self.message
     
     def setMessages(self, message:str):
@@ -98,7 +96,7 @@ class ScreenManager():
     def getBucles(self):
         return self.bucles
     
-    def setBucles(self, bucles:str):
+    def setBucles(self, bucles:int):
         try:
             bucle = int(bucles)
         except ValueError:
@@ -111,7 +109,7 @@ class ScreenManager():
         self.currentScreen = screen
         self.screens[self.currentScreen].show()
 
-    def changescreenWithMessage(self, screen:ScreenManager.ScreenType, message:str):
+    def changeScreenWithMessage(self, screen:ScreenManager.ScreenType, message:str):
         self.message = message
         self.changeScreen(screen)
 

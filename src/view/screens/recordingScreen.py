@@ -15,7 +15,6 @@ class RecordingScreen(BaseScreen):
         self.setActionsList = setActionsList
         self.recorder = None
         self.waitTime = None
-        self.recording = False
 
     def userInputListener(self, input):
         pass
@@ -35,12 +34,11 @@ class RecordingScreen(BaseScreen):
         while self.waitTime > 0:
             sleep(1)
             self.waitTime -= 1
-        self.recording = True
         self.recorder.start()
 
     def show(self):
         self.waitTime = 3
-        self.recorder = Recorder(self.stopHandler, configManager.getConfig("endKeys"))
+        self.recorder = Recorder(self.stopHandler, configManager.getConfig("stopKeys"))
         threading.Thread(target=self.waitForStart).start()
 
     def draw(self, window: curses._CursesWindow):
@@ -50,13 +48,11 @@ class RecordingScreen(BaseScreen):
             sleep(.1)
             return
 
-        window.addstr(2,0, "Finalizar en " + str(configManager.getConfig("endKeys")) + "\n")
+        window.addstr(2,0, "Finalizar en " + str(configManager.getConfig("stopKeys")) + "\n")
 
         events = self.recorder.getEvents()
         for i, event in enumerate(reversed(events[-6:])):
             window.addstr(f"{i} - " + str(event) + "\n")
         self.recorder.wait()
 
-
-        
         
